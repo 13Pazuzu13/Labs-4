@@ -52,11 +52,11 @@ if not wlan.isconnected():
 
 print("Connected to WiFi")
 print("ESP IP:", wlan.ifconfig()[0])
-
 ```
+
 Запомните IP‑адрес, который будет выведен. Затем создайте файл `main.py` на устройстве с кодом веб‑сервера:
 Файл → Новый → Сохранить как → **main.py** → устройство ESP
-
+```
  from micropyserver import MicroPyServer
 
 server = MicroPyServer()
@@ -75,11 +75,11 @@ server.start()
 import socket
 import machine
 
-# Встроенный светодиод на ESP8266
+
 led = machine.Pin(2, machine.Pin.OUT)
 led.value(1)  # включен низким уровнем, выключен высоким
 
-# Настройка сокета
+Настройка сокета
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 s = socket.socket()
 s.bind(addr)
@@ -120,7 +120,7 @@ sensor = dht.DHT11(machine.Pin(14))
 led = machine.Pin(2, machine.Pin.OUT)
 led.value(1)
 
-# Создание сокета
+ Создание сокета
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 s = socket.socket()
 s.bind(addr)
@@ -136,7 +136,7 @@ while True:
 
 request = cl.recv(1024).decode()
 
- # Считываем DHT11
+  Считываем DHT11
  try:
         sensor.measure()
         temp = sensor.temperature()
@@ -145,7 +145,7 @@ request = cl.recv(1024).decode()
     except OSError:
         sensor_data = "Sensor error"
 
-# Управление LED
+ Управление 
  if '/on' in request:
         led.value(0)
     elif '/off' in request:
