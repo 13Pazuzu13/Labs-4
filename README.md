@@ -56,7 +56,7 @@ print("ESP IP:", wlan.ifconfig()[0])
 ```
 Запомните IP‑адрес, который будет выведен. Затем создайте файл `main.py` на устройстве с кодом веб‑сервера:
 Файл → Новый → Сохранить как → **main.py** → устройство ESP
- ```
+
  from micropyserver import MicroPyServer
 
 server = MicroPyServer()
@@ -67,11 +67,12 @@ def handler_root(request):
 server.add_route("/", handler_root)
 
 server.start()
+```
 
-
-  ```
+ 
 Для корректной работы потребуется разместить на устройстве файлы micropyserver.py и utils.py, которые можно взять из репозитория на GitHub (например, [https://github.com/troublegum/micropyserver] Далее реализуйте управление реле через HTTP‑запросы следующим образом:
-```import socket
+```
+import socket
 import machine
 
 # Встроенный светодиод на ESP8266
@@ -92,9 +93,9 @@ while True:
     except OSError:
         continue
 
-    request = cl.recv(1024).decode()
+   request = cl.recv(1024).decode()
 
-    if '/on' in request:
+   if '/on' in request:
         led.value(0)  # включаем светодиод
         html = "<h1>LED ON</h1><a href='/off'>Turn OFF</a>"
     elif '/off' in request:
@@ -103,13 +104,14 @@ while True:
     else:
         html = "<h1>HELLO WORLD!</h1><a href='/on'>ON</a> <a href='/off'>OFF</a>"
 
-    response = 'HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n' + html
+   response = 'HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n' + html
     cl.send(response)
     cl.close()
 
 ```
 Наконец, организуйте вывод данных с датчика DHT11
-```import socket
+```
+import socket
 import machine
 import dht
 import time
@@ -132,10 +134,10 @@ while True:
     except OSError:
         continue
 
-    request = cl.recv(1024).decode()
+request = cl.recv(1024).decode()
 
-    # Считываем DHT11
-    try:
+ # Считываем DHT11
+ try:
         sensor.measure()
         temp = sensor.temperature()
         hum = sensor.humidity()
@@ -143,19 +145,19 @@ while True:
     except OSError:
         sensor_data = "Sensor error"
 
-    # Управление LED
-    if '/on' in request:
+# Управление LED
+ if '/on' in request:
         led.value(0)
     elif '/off' in request:
         led.value(1)
 
-    html = f"<h1>HELLO WORLD</h1><p>{sensor_data}</p><a href='/on'>LED ON</a> <a href='/off'>LED OFF</a>"
+html = f"<h1>HELLO WORLD</h1><p>{sensor_data}</p><a href='/on'>LED ON</a> <a href='/off'>LED OFF</a>"
     response = 'HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n' + html
     cl.send(response)
     cl.close()
-
 ```
 **Варианты заданий:**
+
 **Вариант 1. “Умная вентиляция помещения”**  
 Студент реализует систему, где HTTP-запрос `/vent/open` открывает окно с помощью сервопривода, а `/vent/close` закрывает. DHT11 измеряет температуру и влажность, и если температура превышает 26 °C, окно открывается автоматически. HC-SR04 контролирует препятствия перед створкой, светодиод отображает состояние вентиляции (зелёный — открыто, красный — закрыто), а кнопка позволяет закрыть окно вручную.
 
